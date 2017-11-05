@@ -1,0 +1,12 @@
+after_script:
+  - docker images
+
+language: bash
+
+script:
+  - docker build -t openzwave .
+  - docker run -d --name openzwave -p 8090:8090 --rm openzwave
+  - curl http://127.0.0.1:8090 | grep "OpenZWave Control Panel"
+  - docker kill openzwave
+
+services: docker
