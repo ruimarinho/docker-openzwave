@@ -20,12 +20,14 @@ RUN apk --no-cache add \
       linux-headers \
       make \
       openssl \
-    && cd /root \
+    && mkdir /zwave \
+    && cd /zwave \
     && git clone https://github.com/OpenZWave/open-zwave.git \
     && cd open-zwave \
     && git checkout ${OPENZWAVE_VERSION} \
     && make \
-    && cd /root \
+    && cp -r config /zwave/ \
+    && cd /zwave \
     && git clone https://github.com/OpenZWave/open-zwave-control-panel.git \
     && cd open-zwave-control-panel \
     && git checkout ${OPENZWAVE_CONTROL_PANEL_VERSION} \
@@ -33,10 +35,13 @@ RUN apk --no-cache add \
     && sed -i 's/#LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) -lresolv/LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) -lresolv/' Makefile \
     && sed -i 's/LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) $(ARCH) -lresolv/#LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) $(ARCH) -lresolv/' Makefile \
     && make \
-    && ln -sd /root/open-zwave/config
+    && mv ozwcp cp.js cp.html /zwave \
+    && cd /zwave \
+    && rm -rf open-zwave open-zwave-control-panel \
+    && apk del .build-dependencies
 
 EXPOSE 8090
 
-WORKDIR /root/open-zwave-control-panel/
+WORKDIR /zwave
 
-ENTRYPOINT ["/root/open-zwave-control-panel/ozwcp"]
+ENTRYPOINT ["/zwave/ozwcp"]
