@@ -1,7 +1,8 @@
 FROM alpine:latest
 
-ENV OPENZWAVE_VERSION=510a37df958d7b7108781e7a16bfe52e5831514d
-ENV OPENZWAVE_CONTROL_PANEL_VERSION=bbbd461c5763faab4949b12da12901f2d6f00f48
+ENV OPENZWAVE_GIT_VERSION=1.4-2954
+ENV OPENZWAVE_VERSION=577868f
+ENV OPENZWAVE_CONTROL_PANEL_VERSION=bbbd461
 
 RUN apk --no-cache add \
       gnutls \
@@ -20,12 +21,14 @@ RUN apk --no-cache add \
       linux-headers \
       make \
       openssl \
-    && cd /root \
+    && mkdir /zwave \
+    && cd /zwave \
     && git clone https://github.com/OpenZWave/open-zwave.git \
     && cd open-zwave \
     && git checkout ${OPENZWAVE_VERSION} \
     && make \
-    && cd /root \
+    && cp -r config /zwave/ \
+    && cd /zwave \
     && git clone https://github.com/OpenZWave/open-zwave-control-panel.git \
     && cd open-zwave-control-panel \
     && git checkout ${OPENZWAVE_CONTROL_PANEL_VERSION} \
@@ -33,10 +36,13 @@ RUN apk --no-cache add \
     && sed -i 's/#LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) -lresolv/LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) -lresolv/' Makefile \
     && sed -i 's/LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) $(ARCH) -lresolv/#LIBS := $(LIBZWAVE) $(GNUTLS) $(LIBMICROHTTPD) -pthread $(LIBUSB) $(ARCH) -lresolv/' Makefile \
     && make \
-    && ln -sd /root/open-zwave/config
+    && mv ozwcp cp.js cp.html /zwave \
+    && cd /zwave \
+    && rm -rf open-zwave open-zwave-control-panel \
+    && apk del .build-dependencies
 
 EXPOSE 8090
 
-WORKDIR /root/open-zwave-control-panel/
+WORKDIR /zwave
 
-ENTRYPOINT ["/root/open-zwave-control-panel/ozwcp"]
+ENTRYPOINT ["/zwave/ozwcp"]

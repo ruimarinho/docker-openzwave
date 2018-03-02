@@ -7,7 +7,7 @@ An OpenZWave docker image with the OpenZWave Control Panel built-in.
 
 ## Supported tags and respective `Dockerfile` links
 
-- `1.4.2784`, `1.4`, `latest` ([Dockerfile](https://github.com/ruimarinho/docker-openzwave/blob/master/Dockerfile))
+- `1.4.2954`, `1.4`, `latest` ([Dockerfile](https://github.com/ruimarinho/docker-openzwave/blob/master/Dockerfile))
 
 This image will be automatically updated whenever there is an update to the base image (`alpine`).
 
