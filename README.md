@@ -1,9 +1,14 @@
+
+---
+
+⚠️ OpenZWave has been [significantly revamped](https://github.com/OpenZWave/qt-openzwave) and _open-zwave-control-panel_ is no longer maintained. Considering switching to an [official image](https://hub.docker.com/u/openzwave) instead.
+
+---
+
+
 # ruimarinho/openzwave
 
 An OpenZWave docker image with the OpenZWave Control Panel built-in.
-
-[![build status][travis-image]][travis-url]
-[![ruimarinho/openzwave][docker-pulls-image]][docker-hub-url] [![ruimarinho/openzwave][docker-stars-image]][docker-hub-url] [![ruimarinho/openzwave][docker-size-image]][docker-hub-url] [![ruimarinho/openzwave][docker-layers-image]][docker-hub-url]
 
 ## Supported tags and respective `Dockerfile` links
 
